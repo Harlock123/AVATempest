@@ -86,7 +86,7 @@ public class GameEngine
                 UpdateGameOver(deltaTime);
                 break;
             case GameState.Paused:
-                // Don't update anything when paused
+                UpdatePaused();
                 break;
         }
 
@@ -442,15 +442,35 @@ public class GameEngine
         }
     }
 
+    private void UpdatePaused()
+    {
+        if (Input.Pause)
+        {
+            // Second ESC while paused = quit
+            RequestQuit();
+        }
+        else if (Input.Start)
+        {
+            // Start/Enter resumes
+            State = GameState.Playing;
+        }
+    }
+
     private void UpdateGameOver(float deltaTime)
     {
         _particleSystem?.Update(deltaTime);
 
-        if (Input.Start)
+        if (Input.Pause)
+        {
+            RequestQuit();
+        }
+        else if (Input.Start)
         {
             StartGame();
         }
     }
+
+    public bool QuitRequested { get; private set; }
 
     public void TogglePause()
     {
@@ -458,5 +478,10 @@ public class GameEngine
             State = GameState.Paused;
         else if (State == GameState.Paused)
             State = GameState.Playing;
+    }
+
+    public void RequestQuit()
+    {
+        QuitRequested = true;
     }
 }

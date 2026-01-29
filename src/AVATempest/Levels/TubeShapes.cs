@@ -43,29 +43,26 @@ public static class TubeShapes
 
     public static Tube CreatePlus(Vector2 center, float innerRadius, float outerRadius)
     {
-        var tube = new Tube(16, false);
-        var points = new Vector2[16];
+        // Plus shape has 12 corners
+        var tube = new Tube(12, false);
+        var points = new Vector2[12];
 
         float outer = outerRadius;
         float inner = outerRadius * 0.4f;
 
-        // Plus shape points (clockwise from top)
-        Vector2[] shape =
-        [
-            new(-inner, -outer), new(inner, -outer),   // Top arm
-            new(inner, -inner), new(outer, -inner),    // Top-right corner
-            new(outer, inner), new(inner, inner),      // Right arm
-            new(inner, outer), new(-inner, outer),     // Bottom arm
-            new(-inner, inner), new(-outer, inner),    // Bottom-left corner
-            new(-outer, -inner), new(-inner, -inner),  // Left arm
-            new(-inner, -outer), new(inner, -outer),   // Back to top
-            new(inner, -inner), new(outer, -inner)     // Extra for 16 segments
-        ];
-
-        for (int i = 0; i < 16; i++)
-        {
-            points[i] = center + shape[i % shape.Length];
-        }
+        // Plus shape points (clockwise from top-left of top arm)
+        points[0] = center + new Vector2(-inner, -outer);  // Top arm, left
+        points[1] = center + new Vector2(inner, -outer);   // Top arm, right
+        points[2] = center + new Vector2(inner, -inner);   // Inner corner, top-right
+        points[3] = center + new Vector2(outer, -inner);   // Right arm, top
+        points[4] = center + new Vector2(outer, inner);    // Right arm, bottom
+        points[5] = center + new Vector2(inner, inner);    // Inner corner, bottom-right
+        points[6] = center + new Vector2(inner, outer);    // Bottom arm, right
+        points[7] = center + new Vector2(-inner, outer);   // Bottom arm, left
+        points[8] = center + new Vector2(-inner, inner);   // Inner corner, bottom-left
+        points[9] = center + new Vector2(-outer, inner);   // Left arm, bottom
+        points[10] = center + new Vector2(-outer, -inner); // Left arm, top
+        points[11] = center + new Vector2(-inner, -inner); // Inner corner, top-left
 
         tube.GenerateFromPoints(center, points, innerRadius / outerRadius);
         return tube;

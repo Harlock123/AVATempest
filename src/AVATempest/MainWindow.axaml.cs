@@ -15,6 +15,7 @@ public partial class MainWindow : Window
     private readonly GameEngine _gameEngine;
     private readonly GameRenderer _gameRenderer;
     private readonly AudioManager _audioManager;
+    private readonly GamepadManager _gamepadManager;
     private readonly Stopwatch _stopwatch;
     private readonly DispatcherTimer _gameTimer;
     private double _lastTime;
@@ -26,7 +27,11 @@ public partial class MainWindow : Window
         _gameEngine = new GameEngine();
         _gameRenderer = new GameRenderer();
         _audioManager = new AudioManager();
+        _gamepadManager = new GamepadManager();
         _stopwatch = Stopwatch.StartNew();
+
+        // Set up gamepad
+        _gameEngine.Input.SetGamepad(_gamepadManager);
 
         // Initialize game canvas
         GameCanvas.Initialize(_gameEngine, _gameRenderer);
@@ -86,6 +91,12 @@ public partial class MainWindow : Window
 
         _gameEngine.Update(deltaTime);
         GameCanvas.InvalidateVisual();
+
+        // Check if quit was requested
+        if (_gameEngine.QuitRequested)
+        {
+            Close();
+        }
     }
 
     private void OnKeyDown(object? sender, KeyEventArgs e)
@@ -105,6 +116,7 @@ public partial class MainWindow : Window
         _gameTimer.Stop();
         _gameRenderer.Dispose();
         _audioManager.Dispose();
+        _gamepadManager.Dispose();
         base.OnClosed(e);
     }
 }

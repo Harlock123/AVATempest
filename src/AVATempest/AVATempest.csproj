@@ -20,5 +20,6 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="NetCoreAudio" Version="2.0.0" />
+    <PackageReference Include="Silk.NET.Input.Sdl" Version="2.23.0" />
   </ItemGroup>
 </Project>

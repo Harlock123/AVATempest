@@ -79,22 +79,28 @@ public class HUDRenderer
     public void RenderGameOver(SKCanvas canvas, float width, float height, int score)
     {
         _vectorRenderer.DrawTextWithGlow(canvas, "GAME OVER",
-            new Vector2(width / 2, height / 2 - 40), new SKColor(255, 0, 0), 48f, centered: true);
+            new Vector2(width / 2, height / 2 - 50), new SKColor(255, 0, 0), 48f, centered: true);
 
         _vectorRenderer.DrawTextWithGlow(canvas, $"FINAL SCORE: {score:N0}",
-            new Vector2(width / 2, height / 2 + 20), ColorPalette.ScoreText, 28f, centered: true);
+            new Vector2(width / 2, height / 2 + 10), ColorPalette.ScoreText, 28f, centered: true);
 
-        _vectorRenderer.DrawTextWithGlow(canvas, "PRESS ENTER TO CONTINUE",
-            new Vector2(width / 2, height / 2 + 80), ColorPalette.ScoreText, 20f, centered: true);
+        _vectorRenderer.DrawTextWithGlow(canvas, "PRESS ENTER TO PLAY AGAIN",
+            new Vector2(width / 2, height / 2 + 70), ColorPalette.ScoreText, 20f, centered: true);
+
+        _vectorRenderer.DrawTextWithGlow(canvas, "PRESS ESC TO QUIT",
+            new Vector2(width / 2, height / 2 + 105), new SKColor(255, 100, 100), 18f, centered: true);
     }
 
     public void RenderPaused(SKCanvas canvas, float width, float height)
     {
         _vectorRenderer.DrawTextWithGlow(canvas, "PAUSED",
-            new Vector2(width / 2, height / 2), ColorPalette.ScoreText, 48f, centered: true);
+            new Vector2(width / 2, height / 2 - 20), ColorPalette.ScoreText, 48f, centered: true);
 
-        _vectorRenderer.DrawTextWithGlow(canvas, "PRESS ESC TO RESUME",
-            new Vector2(width / 2, height / 2 + 60), ColorPalette.ScoreText, 20f, centered: true);
+        _vectorRenderer.DrawTextWithGlow(canvas, "PRESS ENTER TO RESUME",
+            new Vector2(width / 2, height / 2 + 50), ColorPalette.ScoreText, 20f, centered: true);
+
+        _vectorRenderer.DrawTextWithGlow(canvas, "PRESS ESC TO QUIT",
+            new Vector2(width / 2, height / 2 + 85), new SKColor(255, 100, 100), 18f, centered: true);
     }
 
     public void RenderLevelComplete(SKCanvas canvas, float width, float height, int level, int bonus, float progress)
