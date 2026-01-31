@@ -41,7 +41,7 @@ public class Level
         int remainingFuseballs = waveNumber >= 2 ? Math.Min(FuseballCount, waveNumber - 1) : 0;
         int remainingPulsars = waveNumber >= 1 ? Math.Min(PulsarCount, waveNumber) : 0;
 
-        int toSpawn = Math.Min(maxActive, remainingFlippers + remainingTankers + remainingSpikers);
+        int toSpawn = Math.Min(maxActive, remainingFlippers + remainingTankers + remainingSpikers + remainingFuseballs + remainingPulsars);
 
         for (int i = 0; i < toSpawn; i++)
         {

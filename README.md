@@ -18,6 +18,13 @@ A cross-platform recreation of the classic 1981 Atari arcade game **Tempest**, b
 - High score persistence (saved to local app data)
 - Gamepad/controller support (auto-detected)
 - Bonus life every 20,000 points
+- Screenshot capture (Ctrl+S)
+
+## Screenshots
+
+| Attract Mode | Gameplay | Warping | Game Over |
+|:------------:|:--------:|:-------:|:---------:|
+| ![Attract](Images/AVATempest_Attract_2026-01-31_175225.png) | ![Playing](Images/AVATempest_Playing_2026-01-31_180618.png) | ![Warping](Images/AVATempest_Warping_2026-01-31_175728.png) | ![GameOver](Images/AVATempest_GameOver_2026-01-31_180632.png) |
 
 ## Controls
 
@@ -32,6 +39,7 @@ A cross-platform recreation of the classic 1981 Atari arcade game **Tempest**, b
 | ENTER or SPACE | Start game / Resume / Play again |
 | ESC (while paused) | Quit game |
 | ESC (on Game Over) | Quit game |
+| CTRL+S | Save screenshot |
 
 ### Controller (Xbox/PlayStation/Generic)
 

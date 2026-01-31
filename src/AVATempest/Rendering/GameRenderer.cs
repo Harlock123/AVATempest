@@ -1,3 +1,4 @@
+using System.IO;
 using System.Numerics;
 using AVATempest.Core;
 using AVATempest.Entities;
@@ -116,6 +117,40 @@ public class GameRenderer : IDisposable
 
         // Draw particles
         _particleSystem.Render(canvas);
+    }
+
+    public bool CaptureScreenshot(float width, float height, GameEngine engine, string filePath)
+    {
+        try
+        {
+            using var surface = SKSurface.Create(new SKImageInfo((int)width, (int)height));
+            if (surface == null) return false;
+
+            var canvas = surface.Canvas;
+
+            if (engine.State == GameState.Attract)
+            {
+                var tube = engine.LevelManager.CurrentLevel?.Tube;
+                var color = engine.LevelManager.CurrentLevel?.PrimaryColor ?? ColorPalette.LevelColors[0];
+                if (tube != null)
+                    RenderAttractMode(canvas, width, height, tube, color, engine.GameTime);
+            }
+            else
+            {
+                Render(canvas, width, height, engine);
+            }
+
+            using var image = surface.Snapshot();
+            using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+            using var stream = File.OpenWrite(filePath);
+            data.SaveTo(stream);
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public void Dispose()

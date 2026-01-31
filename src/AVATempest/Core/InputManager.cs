@@ -9,6 +9,8 @@ public class InputManager
     private readonly HashSet<Key> _justReleasedKeys = new();
 
     private GamepadManager? _gamepad;
+    private float _wheelAccumulator;
+    private int _wheelSteps;
 
     public void SetGamepad(GamepadManager gamepad)
     {
@@ -19,9 +21,9 @@ public class InputManager
     public bool IsKeyJustPressed(Key key) => _justPressedKeys.Contains(key);
     public bool IsKeyJustReleased(Key key) => _justReleasedKeys.Contains(key);
 
-    // Combined keyboard + gamepad input
-    public bool MoveLeft => IsKeyDown(Key.Left) || IsKeyDown(Key.A) || (_gamepad?.MoveLeft ?? false);
-    public bool MoveRight => IsKeyDown(Key.Right) || IsKeyDown(Key.D) || (_gamepad?.MoveRight ?? false);
+    // Combined keyboard + gamepad + mouse wheel input
+    public bool MoveLeft => IsKeyDown(Key.Left) || IsKeyDown(Key.A) || (_gamepad?.MoveLeft ?? false) || _wheelSteps < 0;
+    public bool MoveRight => IsKeyDown(Key.Right) || IsKeyDown(Key.D) || (_gamepad?.MoveRight ?? false) || _wheelSteps > 0;
     public bool Fire => IsKeyDown(Key.Space) || IsKeyDown(Key.Z) || (_gamepad?.Fire ?? false);
     public bool FireJustPressed => IsKeyJustPressed(Key.Space) || IsKeyJustPressed(Key.Z) || (_gamepad?.FireJustPressed ?? false);
     public bool SuperZapper => IsKeyJustPressed(Key.Tab) || IsKeyJustPressed(Key.X) || (_gamepad?.SuperZapperJustPressed ?? false);
@@ -45,10 +47,33 @@ public class InputManager
         _justReleasedKeys.Add(key);
     }
 
+    public void OnMouseWheel(float delta)
+    {
+        // Accumulate wheel input and convert to discrete steps
+        // Negative delta = scroll down = move left, Positive = scroll up = move right
+        _wheelAccumulator += delta;
+
+        const float threshold = 0.2f;
+        while (_wheelAccumulator >= threshold)
+        {
+            _wheelSteps++;
+            _wheelAccumulator -= threshold;
+        }
+        while (_wheelAccumulator <= -threshold)
+        {
+            _wheelSteps--;
+            _wheelAccumulator += threshold;
+        }
+    }
+
     public void Update()
     {
         _justPressedKeys.Clear();
         _justReleasedKeys.Clear();
+
+        // Consume one wheel step per frame (allows fast scrolling to queue up moves)
+        if (_wheelSteps > 0) _wheelSteps--;
+        else if (_wheelSteps < 0) _wheelSteps++;
 
         // Update gamepad state
         _gamepad?.Update();

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Numerics;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -39,6 +40,7 @@ public partial class MainWindow : Window
         // Set up input handling
         KeyDown += OnKeyDown;
         KeyUp += OnKeyUp;
+        PointerWheelChanged += OnPointerWheelChanged;
 
         // Handle window size changes
         PropertyChanged += (s, e) =>
@@ -101,13 +103,44 @@ public partial class MainWindow : Window
 
     private void OnKeyDown(object? sender, KeyEventArgs e)
     {
+        // Handle Ctrl+S for screenshot
+        if (e.KeyModifiers.HasFlag(KeyModifiers.Control) && e.Key == Key.S)
+        {
+            TakeScreenshot();
+            e.Handled = true;
+            return;
+        }
+
         _gameEngine.Input.OnKeyDown(e.Key);
         e.Handled = true;
+    }
+
+    private void TakeScreenshot()
+    {
+        var width = (float)ClientSize.Width;
+        var height = (float)ClientSize.Height;
+        if (width <= 0 || height <= 0) return;
+
+        var pictures = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+        var screenshotDir = Path.Combine(pictures, "AVATempest");
+        Directory.CreateDirectory(screenshotDir);
+
+        var timestamp = DateTime.Now.ToString("yyyy-MM-dd_HHmmss");
+        var filename = $"AVATempest_{_gameEngine.State}_{timestamp}.png";
+        var filePath = Path.Combine(screenshotDir, filename);
+
+        _gameRenderer.CaptureScreenshot(width, height, _gameEngine, filePath);
     }
 
     private void OnKeyUp(object? sender, KeyEventArgs e)
     {
         _gameEngine.Input.OnKeyUp(e.Key);
+        e.Handled = true;
+    }
+
+    private void OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)
+    {
+        _gameEngine.Input.OnMouseWheel((float)e.Delta.Y);
         e.Handled = true;
     }
 

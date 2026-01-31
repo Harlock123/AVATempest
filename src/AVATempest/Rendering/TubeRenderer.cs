@@ -45,12 +45,9 @@ public class TubeRenderer
             }
         }
 
-        // Draw the final lane line for closed tubes
-        if (!tube.IsOpen)
-        {
-            var lastSegment = tube.Segments[^1];
-            _vectorRenderer.DrawLine(canvas, lastSegment.InnerRight, lastSegment.OuterRight, color, 1.5f);
-        }
+        // Draw the final lane line (right edge of last segment)
+        var lastSegment = tube.Segments[^1];
+        _vectorRenderer.DrawLine(canvas, lastSegment.InnerRight, lastSegment.OuterRight, color, 1.5f);
     }
 
     private void DrawSpike(SKCanvas canvas, TubeSegment segment)
