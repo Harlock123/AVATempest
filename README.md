@@ -63,6 +63,33 @@ A cross-platform recreation of the classic 1981 Atari arcade game **Tempest**, b
 
 **Bonus:** Extra life every 20,000 points
 
+## Download and run
+
+Ready-to-run builds for Windows, macOS and Linux, on both Intel/AMD and ARM, are on the
+[Releases page](https://github.com/Harlock123/AVATempest/releases). **Latest build** is rebuilt on
+every push to `master`. Each download is one self-contained executable: no .NET install is
+needed.
+
+```bash
+tar -xzf AVATempest-linux-arm64.tar.gz      # or linux-x64, linux-arm, osx-arm64, osx-x64
+./AVATempest
+```
+
+On Windows, unzip `AVATempest-win-x64.zip` (or `-win-arm64`) and run `AVATempest.exe`. On macOS, if
+Gatekeeper refuses to open it, run `xattr -d com.apple.quarantine AVATempest` once.
+
+### Linux: sound and gamepads
+
+- **Sound** needs `aplay`, from the `alsa-utils` package. Without it the game runs but is
+  silent. Minimal installs (Arch, Omarchy, some Raspberry Pi images) don't include it:
+
+  ```bash
+  sudo apt install alsa-utils             # Debian / Ubuntu / Raspberry Pi OS
+  sudo pacman -S --needed alsa-utils      # Arch / Omarchy
+  ```
+
+- **Gamepads** work out of the box: SDL2 is bundled for every platform, ARM included.
+
 ## Requirements
 
 - .NET 9.0 SDK
